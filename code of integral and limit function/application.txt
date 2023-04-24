@@ -1,0 +1,70 @@
+from sympy import *
+from typing import Callable
+
+def trapezoidal_rule(f: Callable, a: float, b: float, n: int) -> float:
+    h = (b - a) / n
+    s = (f(a) + f(b)) / 2
+    for i in range(1, n):
+        x = a + i * h
+        s += f(x)
+    return h * s
+
+if __name__ == '__main__':
+    # Get user input for the function to integrate
+    function_string = input("Enter the function to integrate (use x as the variable): ")
+    x = symbols('x')
+    function = lambdify(x, function_string)
+    
+    # Get user input for the lower and upper bounds of the integral
+    lower_bound = float(input("Enter the lower bound of the integral: "))
+    upper_bound = float(input("Enter the upper bound of the integral: "))
+    
+    # Get user input for the number of subintervals to use in the trapezoidal rule
+    num_subintervals = int(input("Enter the number of subintervals to use in the trapezoidal rule: "))
+    
+    # Calculate the integral using the trapezoidal rule
+    integral = trapezoidal_rule(function, lower_bound, upper_bound, num_subintervals)
+    
+    # Print the result
+    print(f"The integral of {function_string} from {lower_bound} to {upper_bound} is approximately {integral}")
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	from sympy import *
+from typing import Callable
+
+def limit(f: Callable, x0: float, direction: str) -> float:
+    if direction == 'left':
+        x = symbols('x', real=True)
+        expr = limit(f(x), x, x0, dir='-')
+        return float(expr)
+    elif direction == 'right':
+        x = symbols('x', real=True)
+        expr = limit(f(x), x, x0, dir='+')
+        return float(expr)
+    else:
+        x = symbols('x', real=True)
+        left_expr = limit(f(x), x, x0, dir='-')
+        right_expr = limit(f(x), x, x0, dir='+')
+        if left_expr == right_expr:
+            return float(left_expr)
+        else:
+            return None
+
+if __name__ == '__main__':
+    # Get user input for the function to calculate the limit of
+    function_string = input("Enter the function to calculate the limit of (use x as the variable): ")
+    x = symbols('x')
+    function = lambdify(x, function_string)
+    
+    # Get user input for the limit point and direction
+    x0 = float(input("Enter the limit point: "))
+    direction = input("Enter the direction (left, right, or two-sided): ")
+    
+    # Calculate the limit using SymPy's limit function
+    limit_value = limit(function, x0, direction)
+    
+    # Print the result
+    if limit_value is not None:
+        print(f"The limit of {function_string} as x approaches {x0} from the {direction} is {limit_value}")
+    else:
+        print(f"The limit of {function_string} as x approaches {x0} does not exist")
